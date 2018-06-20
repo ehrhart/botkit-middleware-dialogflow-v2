@@ -59,8 +59,7 @@ To get started, [sign up for an account](https://console.dialogflow.com/api-clie
 Next, create an [agent](https://dialogflow.com/docs/agents). Agents represent your bots' NLU (Natural Language
 Understanding). Your bot will interact with your agent through the [Dialogflow API](https://dialogflow.com/docs/reference/agent/).
 
-The API keys can be found in the [agent settings](https://dialogflow.com/docs/agents#settings). Note the
-_Client access token_; this will be required by your bot.
+Note the _Google Project ID_ that can be found in the [agent settings](https://dialogflow.com/docs/agents#settings); this will be required by your bot.
 
 <p align="center">
   <img src="images/tokens.png" />
@@ -101,7 +100,7 @@ Create a middleware object which we'll be attaching to the controller:
 
 ```javascript
 var options = {
-    token: process.env.dialogflow,
+    projectId: process.env.dialogflow,
 };
 var dialogflowMiddleware = require('botkit-middleware-dialogflow-v2')(options);
 ```
@@ -183,7 +182,7 @@ When creating the middleware object, pass an options object with the following p
 
 | Property           | Required | Default        | Description                                                                                                                                                                                                                          |
 | ------------------ | :------- | :------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| token              | Yes      | N/A            | Client access token, from the Dialogflow Console.                                                                                                                                                                                    |
+| projectId          | Yes      | N/A            | Google Projet ID, from the Dialogflow Console.                                                                                                                                                                                    |
 | ignoreType         | No       | 'self_message' | Skip Dialogflow processing if the `type` matches the pattern. Useful to avoid unneccessary API calls. Patterns can be provided as a string, regex, or array of either.                                                               |
 | minimum_confidence | No       | 0.5            | Dialogflow returns a confidence (in the range 0.0 to 1.0) for each matching intent. This value is the cutoff - the `hears` and `action` middleware will only return a match for confidence values equal or greather than this value. |
 | sessionIdProps | No | ['user', 'channel'] | Session ID's help Dialogflow preserve context across multiple calls. By default, this session ID is an MD5 hash of the `user` and `channel` properties on the `message` object. If you'd like to use different properties, provide them as a string or array or strings. If none of the desired properties are available on a `message`, the middleware will use a random session ID instead. 
