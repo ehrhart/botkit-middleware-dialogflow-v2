@@ -1,11 +1,12 @@
 var debug = require('debug')('dialogflow-middleware');
-var apiai = require('apiai');
+var dialogflow = require('dialogflow');
 var makeArrayOfRegex = require('./util').makeArrayOfRegex;
 var generateSessionId = require('./util').generateSessionId;
+var structProtoToJson = require('./structjson').structProtoToJson;
 
 module.exports = function(config) {
-    if (!config || !config.token) {
-        throw new Error('No dialogflow token provided.');
+    if (!config || !config.projectId) {
+        throw new Error('No dialogflow project ID provided.');
     }
 
     if (!config.minimum_confidence) {
@@ -18,7 +19,7 @@ module.exports = function(config) {
 
     var ignoreTypePatterns = makeArrayOfRegex(config.ignoreType || []);
 
-    var app = apiai(config.token);
+    var app = new dialogflow.SessionsClient();
 
     var middleware = {};
 
@@ -50,26 +51,33 @@ module.exports = function(config) {
             app.language,
             message.text
         );
-        request = app.textRequest(message.text, {
-            sessionId: requestSessionId,
-        });
 
-        request.on('response', function(response) {
-            message.intent = response.result.metadata.intentName;
-            message.entities = response.result.parameters;
-            message.fulfillment = response.result.fulfillment;
-            message.confidence = response.result.score;
-            message.nlpResponse = response;
+        var request = {
+            session: app.sessionPath(config.projectId, requestSessionId),
+            queryInput: {
+                text: {
+                    text: message.text,
+                    languageCode: app.language,
+                },
+            },
+        };
+
+        app.detectIntent(request).then(function(responses) {
+            const result = responses[0].queryResult;
+            debug('result=%O', result);
+            message.intent = result.intent.displayName;
+            message.entities = structProtoToJson(result.parameters);
+            message.fulfillment = {
+                speech: result.fulfillmentText,
+                messages: result.fulfillmentMessages,
+            };
+            message.confidence = result.intentDetectionConfidence;
+            message.nlpResponse = result;
             debug('dialogflow annotated message: %O', message);
             next();
-        });
-
-        request.on('error', function(error) {
+        }).catch(function(error) {
             debug('dialogflow returned error', error);
-            next(error);
         });
-
-        request.end();
     };
 
     middleware.hears = function(patterns, message) {
