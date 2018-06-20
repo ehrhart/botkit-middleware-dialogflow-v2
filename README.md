@@ -2,11 +2,11 @@
 <!-- markdownlint-disable no-inline-html -->
 <!-- markdownlint-disable ul-indent -->
 
-[![Build Status](https://travis-ci.org/jschnurr/botkit-middleware-dialogflow.svg?branch=master)](https://travis-ci.org/jschnurr/botkit-middleware-dialogflow)
+[![Build Status](https://travis-ci.org/thibaultehrhart/botkit-middleware-dialogflow-vé.svg?branch=master)](https://travis-ci.org/thibaultehrhart/botkit-middleware-dialogflow-v2)
 
-# Botkit Middleware Dialogflow
+# Botkit Middleware Dialogflow v2
 
-- [Botkit Middleware Dialogflow](#botkit-middleware-dialogflow)
+- [Botkit Middleware Dialogflow v2](#botkit-middleware-dialogflow-v2)
     - [Installation](#installation)
     - [Function Overview](#function-overview)
         - [Receive Middleware](#receive-middlewarehttps---githubcom-howdyai-botkit-blob-master-docs-middlewaremdreceive-middleware)
@@ -35,7 +35,7 @@ the results being immediately available to your bot.
 ## Installation
 
 ```bash
-npm install botkit-middleware-dialogflow --save
+npm install https://github.com/thibaultehrhart/botkit-middleware-dialogflow-v2 --save
 ```
 
 ## Function Overview
@@ -103,7 +103,7 @@ Create a middleware object which we'll be attaching to the controller:
 var options = {
     token: process.env.dialogflow,
 };
-var dialogflowMiddleware = require('botkit-middleware-dialogflow')(options);
+var dialogflowMiddleware = require('botkit-middleware-dialogflow-v2')(options);
 ```
 
 Tell your Slackbot to use the middleware when it receives a message:
@@ -222,51 +222,13 @@ DEBUG=dialogflow-middleware DEBUG_DEPTH=null node your_awesome_bot.js
 
 # Change Log
 
-*   12-June-2018 v1.4.1
-    *   feat sessionId sent to DF based on user and channel properties of message
-    *   feat allow customization of sessionId to use different properties as desired
-
-*   24-May-2018 v1.4.0
-
-    *   feat support for sending queries to Dialogflow in different languages, specified by lang prop on message
-    *   docs add TOC to README
-
-*   7-May-2018 v1.3.0
-
-    *   fix #9 add support for ignoreType to avoid unneccessary API calls to DF
-    *   docs: more debugging tips
-    *   docs: restore images in readme
-
-*   31-Mar-2018 v1.2.0
-
-    *   fix #5 add full support for regex and strings for intents and actions
-    *   change slack example env variable to improve clarity
-    *   add tests for existing functionality
-
-*   9-Dec-2017 v1.1.0
-
-    *   BREAKING update criteria for skipping middleware automatically
-    *   BREAKING remove skip_bot option
-    *   fix linting errors
-    *   travis and changelog added
-    *   readme updates
-    *   updated examples
-    *   filter out self_message type from slack
-    *   ignore editor files
-    *   migrate to eslint and apply formatter to comply with .eslintrc rules
-    *   add debug logging
-
-*   3-Dec-2017 v1.0.1
-
-    *   rebrand as dialogflow
-
-*   pre-fork as botkit-middleware-apiai
+*   pre-fork as botkit-middleware-dialogflow-v2
     *   initial release
 
 # Credit
 
-Forked from [botkit-middleware-apiai](https://github.com/abeai/botkit-middleware-apiai). Thanks to
-[@abeai](https://github.com/abeai) for the original work.
+Forked from [botkit-middleware-dialogflow](https://github.com/jschnurr/botkit-middleware-dialogflow). Thanks to
+[@jschnurr](https://github.com/jschnurr) for the original work.
 
 # License
 
