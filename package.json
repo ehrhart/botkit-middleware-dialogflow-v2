@@ -1,7 +1,7 @@
 {
-  "name": "botkit-middleware-dialogflow",
-  "version": "1.4.1",
-  "description": "Middleware for using Dialogflow (formerly Api.ai) with Botkit-powered bots",
+  "name": "botkit-middleware-dialogflow-v2",
+  "version": "1.0.0",
+  "description": "Middleware for using Dialogflow v2 with Botkit-powered bots",
   "main": "src/botkit-middleware-dialogflow.js",
   "scripts": {
     "test": "npm run lint && mocha test --exit",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jschnurr/botkit-middleware-dialogflow.git"
+    "url": "https://github.com/thibaultehrhart/botkit-middleware-dialogflow-v2.git"
   },
   "keywords": [
     "botkit",
@@ -20,14 +20,14 @@
     "slack"
   ],
   "author": {
-    "name": "Jeff Schnurr",
-    "email": "jschnurr@gmail.com"
+    "name": "Thibault Ehrhart",
+    "email": "thibault.eh@gmail.com"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jschnurr/botkit-middleware-dialogflow/issues"
+    "url": "https://github.com/thibaultehrhart/botkit-middleware-dialogflow-v2/issues"
   },
-  "homepage": "https://github.com/jschnurr/botkit-middleware-dialogflow#readme",
+  "homepage": "https://github.com/thibaultehrhart/botkit-middleware-dialogflow-v2#readme",
   "dependencies": {
     "apiai": "^4.0.3",
     "debug": "^3.1.0",
