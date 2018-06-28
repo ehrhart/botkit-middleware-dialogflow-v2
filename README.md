@@ -2,7 +2,7 @@
 <!-- markdownlint-disable no-inline-html -->
 <!-- markdownlint-disable ul-indent -->
 
-[![Build Status](https://travis-ci.org/thibaultehrhart/botkit-middleware-dialogflow-vé.svg?branch=master)](https://travis-ci.org/thibaultehrhart/botkit-middleware-dialogflow-v2)
+[![Build Status](https://travis-ci.org/thibaultehrhart/botkit-middleware-dialogflow-v2.svg?branch=master)](https://travis-ci.org/thibaultehrhart/botkit-middleware-dialogflow-v2)
 
 # Botkit Middleware Dialogflow v2
 
