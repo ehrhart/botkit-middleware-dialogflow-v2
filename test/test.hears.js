@@ -3,6 +3,26 @@ var nock = require('nock');
 var expect = require('chai').expect;
 var clone = require('clone');
 
+/**
+ * Mocks a gRPC method call.
+ *
+ * @param {object} expectedRequest - the mocked request
+ * @param {object} response - the mocked response
+ * @param {error} error - the mocked error
+ * @return {function} callback function
+ */
+function mockSimpleGrpcMethod(expectedRequest, response, error) {
+    return function(actualRequest, options, callback) {
+        if (error) {
+            callback(error);
+        } else if (response) {
+            callback(null, response);
+        } else {
+            callback(null);
+        }
+    };
+}
+
 describe('hears()', function() {
     // Dialogflow params
     var config = require('./config.json');
@@ -39,35 +59,82 @@ describe('hears()', function() {
 
     // response from DialogFlow api call to /query endpoint
     var apiResponse = {
-        id: '05a7ed32-6572-45a7-a27e-465959df5f9f',
-        timestamp: '2018-03-31T14:16:54.369Z',
-        lang: 'en',
-        result: {
-            source: 'agent',
-            resolvedQuery: 'hi',
-            action: '',
-            actionIncomplete: false,
-            parameters: {},
-            contexts: [],
-            metadata: {
-                intentId: 'bd8fdabb-2fd6-4018-a3a5-0c57c41f65c1',
-                webhookUsed: 'false',
-                webhookForSlotFillingUsed: 'false',
-                intentName: 'hello-intent',
+        responseId: '261d37f0-34ee-11e8-bcca-67db967c2594',
+        queryResult: {
+            fulfillmentMessages: [{
+                platform: 'PLATFORM_UNSPECIFIED',
+                text: {
+                    text: ['Good day!'],
+                },
+                message: 'text',
+            }],
+            outputContexts: [],
+            queryText: 'hi',
+            speechRecognitionConfidence: 0,
+            action: 'hello-intent',
+            parameters: {
+                fields: {},
             },
-            fulfillment: {speech: '', messages: [{type: 0, speech: ''}]},
-            score: 1,
+            allRequiredParamsPresent: true,
+            fulfillmentText: 'Good day!',
+            webhookSource: '',
+            webhookPayload: null,
+            intent: {
+                inputContextNames: [],
+                events: [],
+                trainingPhrases: [],
+                outputContexts: [],
+                parameters: [],
+                messages: [],
+                defaultResponsePlatforms: [],
+                followupIntentInfo: [],
+                name: 'projects/botkit-middleware/agent/intents/a6bd6dd4-b934-4dc2-ac84-fee6b4c428d5',
+                displayName: 'hello-intent',
+                priority: 0,
+                isFallback: false,
+                webhookState: 'WEBHOOK_STATE_UNSPECIFIED',
+                action: '',
+                resetContexts: false,
+                rootFollowupIntentName: '',
+                parentFollowupIntentName: '',
+                mlDisabled: false,
+            },
+            intentDetectionConfidence: 1,
+            diagnosticInfo: {
+                fields: {},
+            },
+            languageCode: 'en',
         },
-        status: {code: 200, errorType: 'success', webhookTimedOut: false},
-        sessionId: '261d37f0-34ee-11e8-bcca-67db967c2594',
+        webhookStatus: null,
     };
+
+    // Mock request
+    var formattedSession = middleware.app.sessionPath('[PROJECT]', '[SESSION]');
+    var queryInput = {};
+    var request = {
+        session: formattedSession,
+        queryInput: queryInput,
+    };
+
+    // Mock Grpc layer
+    middleware.app._innerApiCalls.detectIntent = mockSimpleGrpcMethod(
+        request,
+        apiResponse
+    );
 
     before(function() {
         nock.disableNetConnect();
 
-        nock(config.url)
-            .post('/' + config.version + '/query?v=' + config.protocol)
-            .reply(200, apiResponse);
+        nock('https://www.googleapis.com:443')
+            .post('/oauth2/v4/token', undefined, {
+                reqheaders: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .reply(200, {
+                access_token: 'abc123',
+                expires_in: 3600,
+            });
     });
 
     after(function() {

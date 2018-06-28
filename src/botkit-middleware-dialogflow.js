@@ -19,9 +19,9 @@ module.exports = function(config) {
 
     var ignoreTypePatterns = makeArrayOfRegex(config.ignoreType || []);
 
-    var app = new dialogflow.SessionsClient();
-
     var middleware = {};
+
+    var app = middleware.app = new dialogflow.SessionsClient();
 
     middleware.receive = function(bot, message, next) {
         if (!message.text || message.is_echo || message.type === 'self_message') {
@@ -62,21 +62,26 @@ module.exports = function(config) {
             },
         };
 
-        app.detectIntent(request).then(function(responses) {
-            const result = responses[0].queryResult;
-            debug('result=%O', result);
-            message.intent = result.intent.displayName;
-            message.entities = structProtoToJson(result.parameters);
-            message.fulfillment = {
-                speech: result.fulfillmentText,
-                messages: result.fulfillmentMessages,
-            };
-            message.confidence = result.intentDetectionConfidence;
-            message.nlpResponse = result;
-            debug('dialogflow annotated message: %O', message);
-            next();
-        }).catch(function(error) {
-            debug('dialogflow returned error', error);
+        app.detectIntent(request, (err, response) => {
+            if (err) {
+                debug('dialogflow returned error', err);
+                next(err);
+            } else {
+                if (response) {
+                    const result = response.queryResult;
+                    debug('result=%O', result);
+                    message.intent = result.intent.displayName;
+                    message.entities = structProtoToJson(result.parameters);
+                    message.fulfillment = {
+                        speech: result.fulfillmentText,
+                        messages: result.fulfillmentMessages,
+                    };
+                    message.confidence = result.intentDetectionConfidence;
+                    message.nlpResponse = response;
+                    debug('dialogflow annotated message: %O', message);
+                }
+                next();
+            }
         });
     };
 
@@ -97,7 +102,8 @@ module.exports = function(config) {
         var regexPatterns = makeArrayOfRegex(patterns);
 
         for (let pattern of regexPatterns) {
-            if (pattern.test(message.nlpResponse.result.action) && message.confidence >= config.minimum_confidence) {
+            if (pattern.test(message.nlpResponse.queryResult.action) &&
+                message.confidence >= config.minimum_confidence) {
                 debug('dialogflow action matched hear pattern', message.intent, pattern);
                 return true;
             }
