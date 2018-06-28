@@ -3,6 +3,8 @@ var nock = require('nock');
 var expect = require('chai').expect;
 var clone = require('clone');
 
+process.env.GOOGLE_APPLICATION_CREDENTIALS = __dirname + '/credentials.json';
+
 describe('receive() text language support', function() {
     // Dialogflow params
     var config = require('./config.json');

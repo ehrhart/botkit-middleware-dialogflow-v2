@@ -3,6 +3,8 @@ var nock = require('nock');
 var expect = require('chai').expect;
 var clone = require('clone');
 
+process.env.GOOGLE_APPLICATION_CREDENTIALS = __dirname + '/credentials.json';
+
 /**
  * Mocks a gRPC method call.
  *
