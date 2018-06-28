@@ -25,7 +25,7 @@ This bot demonstrates many of the core features of Botkit:
     app_secret=<MY APP SECRET> \
     page_token=<MY PAGE TOKEN> \
     verify_token=<MY_VERIFY_TOKEN> \
-    dialogflow=<CLIENT_ACCESS_TOKEN> \
+    dialogflow=<GOOGLE_PROJECT_ID> \
     node facebook_bot.js [--lt [--ltsubdomain LOCALTUNNEL_SUBDOMAIN]]
 
   Use the --lt option to make your bot available on the web through localtunnel.me.
@@ -105,7 +105,7 @@ var controller = Botkit.facebookbot({
 });
 
 var dialogflow = require('../')({
-    token: process.env.dialogflow,
+    projectId: process.env.dialogflow,
 });
 
 controller.middleware.receive.use(dialogflow.receive);

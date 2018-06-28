@@ -20,13 +20,13 @@ This bot demonstrates many of the core features of Botkit:
 
     -> http://my.slack.com/services/new/bot
 
-  Get a developer access token from dialogflow
+  Get a Google Project ID from dialogflow
 
     -> https://console.dialogflow.com/api-client/#/editAgent/<your-agent-id>
 
   Run your bot from the command line:
 
-    slack=<api-token> dialogflow=<access-token> node example_bot.js
+    slack=<api-token> dialogflow=<google-project-id> node example_bot.js
 
 # USE THE BOT:
 
@@ -74,7 +74,7 @@ var slackBot = slackController.spawn({
 });
 
 var dialogflowMiddleware = require('../')({
-    token: process.env.dialogflow,
+    projectId: process.env.dialogflow,
 });
 
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
