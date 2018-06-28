@@ -13,6 +13,7 @@
         - [Hear Middleware](#hear-middlewarehttps---githubcom-howdyai-botkit-blob-master-docs-middlewaremdhear-middleware)
     - [Usage](#usage)
         - [Create a Dialogflow Agent](#create-a-dialogflow-agent)
+        - [Set up authentication](#set-up-authentication)
         - [Configure a Channel](#configure-a-channel)
         - [Bot Setup](#bot-setup)
     - [What it does](#what-it-does)
@@ -64,7 +65,10 @@ Note the _Google Project ID_ that can be found in the [agent settings](https://d
 <p align="center">
   <img src="images/tokens.png" />
 </p>
-<br>
+
+### Set up Google Cloud authentication
+
+[Set up authentication with a service account](https://cloud.google.com/docs/authentication/getting-started) so you can access the API.
 
 ### Configure a Channel
 
