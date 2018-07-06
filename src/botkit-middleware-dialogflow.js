@@ -70,7 +70,7 @@ module.exports = function(config) {
                 if (response) {
                     const result = response.queryResult;
                     debug('result=%O', result);
-                    message.intent = result.intent.displayName;
+                    message.intent = result.intent ? result.intent.displayName : null;
                     message.entities = structProtoToJson(result.parameters);
                     message.fulfillment = {
                         speech: result.fulfillmentText,
