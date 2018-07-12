@@ -21,7 +21,30 @@ module.exports = function(config) {
 
     var middleware = {};
 
-    var app = middleware.app = new dialogflow.SessionsClient();
+    var opts = {
+        projectId: config.projectId,
+    };
+
+    if (config.credentials) {
+        opts.credentials = config.credentials;
+    }
+    if (config.email) {
+        opts.email = config.email;
+    }
+    if (config.keyFilename) {
+        opts.keyFilename = config.keyFilename;
+    }
+    if (config.port) {
+        opts.port = config.port;
+    }
+    if (config.promise) {
+        opts.promise = config.promise;
+    }
+    if (opts.servicePath) {
+        opts.servicePath = config.servicePath;
+    }
+
+    var app = middleware.app = new dialogflow.SessionsClient(opts);
 
     middleware.receive = function(bot, message, next) {
         if (!message.text || message.is_echo || message.type === 'self_message') {
